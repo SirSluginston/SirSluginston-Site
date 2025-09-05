@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SirSluginston Co</title>
+  <!-- SharedUI CSS -->
+  <link rel="stylesheet" href="../SirSluginston-SharedUI/SharedUI-border.css">
+  <link rel="stylesheet" href="../SirSluginston-SharedUI/variables.css">
+  <link rel="stylesheet" href="../SirSluginston-SharedUI/Header/header.css">
+  <link rel="stylesheet" href="../SirSluginston-SharedUI/Navbar/navbar.css">
+  <link rel="stylesheet" href="../SirSluginston-SharedUI/Body/body.css">
+  <link rel="stylesheet" href="../SirSluginston-SharedUI/Footer/footer.css">
+  <link rel="stylesheet" href="../SirSluginston-SharedUI/ThemeToggle/theme-toggle.css">
+  <!-- Your custom site CSS (optional) -->
+  <link rel="stylesheet" href="site.css">
+</head>
+<body>
+  <div class="sharedui-outer-border">
+    <!-- SharedUI Header -->
+    <div id="header-container"></div>
+    <!-- SharedUI Navbar -->
+    <div id="site-navbar"></div>
+    <!-- SharedUI Body -->
+    <div id="body-container">
+      <div class="shared-body">
+        <div class="body-header" style="text-align:center;">
+          <h2 id="shared-body-title">Welcome to SirSluginston Co</h2>
+          <p id="shared-body-tagline">This is your main site, powered by SharedUI.</p>
+        </div>
+        <div class="body-content" id="shared-body-content">
+          <p>Edit this content to make your homepage unique!</p>
+        </div>
+      </div>
+    </div>
+    <!-- SharedUI Footer -->
+    <div id="footer-container"></div>
+  </div>
+  <!-- SharedUI JS -->
+  <script src="../SirSluginston-SharedUI/SharedUI/sharedui.js"></script>
+  <script src="../SirSluginston-SharedUI/ThemeToggle/theme-toggle.js"></script>
+  <script src="../SirSluginston-SharedUI/Header/header.js"></script>
+  <!-- Your custom site JS (optional) -->
+  <script src="site.js"></script>
+  <script>
+    (async function() {
+      const { loadConfig, injectHeader, injectFooter, applyBranding } = window.SharedUILib;
+      // Use the config for the main project (index.html)
+      const config = await loadConfig('index.html');
+      window.SharedUIConfig = config;
+      applyBranding(config);
+      injectHeader(config);
+      injectFooter(config);
+      // Set body content from config
+      var bodyTitleEl = document.getElementById('shared-body-title');
+      var pageHref = window.location.pathname.split('/').pop() || 'index.html';
+      var pageConfig = (config.pages || []).find(p => p.href && p.href.toLowerCase() === pageHref.toLowerCase());
+      if (bodyTitleEl && pageConfig && pageConfig.pageTitle) bodyTitleEl.textContent = pageConfig.pageTitle;
+      var bodyTaglineEl = document.getElementById('shared-body-tagline');
+      if (bodyTaglineEl && pageConfig && pageConfig.pageTagline) bodyTaglineEl.textContent = pageConfig.pageTagline;
+      // Now load the navbar script so it can use SharedUIConfig
+      var navbarScript = document.createElement('script');
+      navbarScript.src = '../SirSluginston-SharedUI/Navbar/navbar.js';
+      document.body.appendChild(navbarScript);
+    })();
+  </script>
+</body>
+</html>
