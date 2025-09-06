@@ -1,5 +1,9 @@
 {
   "dependencies": {
     "sirsluginston-sharedui": "^1.0.1"
+  },
+  "scripts": {
+    "build": "xcopy /E /I /Y node_modules\\sirsluginston-sharedui\\SharedUI SirSluginston-SharedUI",
+    "postinstall": "xcopy /E /I /Y node_modules\\sirsluginston-sharedui\\SharedUI SirSluginston-SharedUI"
   }
 }
