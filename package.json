@@ -5,5 +5,8 @@
   "scripts": {
     "build": "xcopy /E /I /Y node_modules\\sirsluginston-sharedui\\SharedUI SirSluginston-SharedUI",
     "postinstall": "xcopy /E /I /Y node_modules\\sirsluginston-sharedui\\SharedUI SirSluginston-SharedUI"
+  },
+  "devDependencies": {
+    "cpx": "^1.5.0"
   }
 }
