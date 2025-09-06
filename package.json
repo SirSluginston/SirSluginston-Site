@@ -2,11 +2,10 @@
   "dependencies": {
     "sirsluginston-sharedui": "^1.0.1"
   },
-  "scripts": {
-    "build": "cpx \"node_modules/sirsluginston-sharedui/SharedUI/**/*\" SirSluginston-SharedUI",
-    "postinstall": "cpx \"node_modules/sirsluginston-sharedui/SharedUI/**/*\" SirSluginston-SharedUI"
-  },
   "devDependencies": {
     "cpx": "^1.5.0"
+  },
+  "scripts": {
+    "build": "cpx \"node_modules/sirsluginston-sharedui/SharedUI/**/*\" SirSluginston-SharedUI"
   }
 }
