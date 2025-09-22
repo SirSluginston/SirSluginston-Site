@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About SirSluginston</title>
+  <link rel="stylesheet" href="SirSluginston-SharedUI/Header/header.css">
+  <link rel="stylesheet" href="SirSluginston-SharedUI/NavigationBar/navigation-bar.css">
+  <link rel="stylesheet" href="SirSluginston-SharedUI/Body/body.css">
+  <link rel="stylesheet" href="SirSluginston-SharedUI/Footer/footer.css">
+  <link rel="stylesheet" href="SirSluginston-SharedUI/variables.css">
+  <link rel="stylesheet" href="SirSluginston-SharedUI/SharedUI-border.css">
+  <link rel="stylesheet" href="SirSluginston-SharedUI/ThemeToggle/theme-toggle.css">
+  <link rel="stylesheet" href="SirSluginston-SharedUI/Hero/hero.css">
+  <!-- Removed temporary full 2px border override (now using standardized SharedUI-border.css) -->
+  <style>
+    body { background: var(--color-bg); margin: 0; color: var(--color-text); }
+    .main-container {
+      width: 100%;
+      max-width: none;
+      margin: 0 auto;
+      background: var(--color-bg);
+      color: var(--color-text);
+      /* border, border-radius, and box-shadow removed for SharedUI consistency */
+      padding: 2.5rem 1rem 0.5rem 1rem;
+    }
+    #footer-container {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+  </style>
+</head>
+  <body style="min-height: 100vh; display: flex; flex-direction: column; margin: 0;">
+    <div class="sharedui-outer-border" style="flex: 1 0 auto; display: flex; flex-direction: column; min-height: 100vh;">
+      <div id="header-container"></div>
+      <div id="site-navbar"></div>
+      <div id="hero-container"></div>
+      <div class="main-container" style="flex: 1 0 auto;">
+        <div style="max-width: 700px; margin: 2em auto; background: var(--color-bg); border-radius: 1em; box-shadow: 0 2px 12px var(--color-accent); padding: 2em;">
+          <h2 style="color: var(--color-primary); text-align: center; font-style: italic;">The Origin of SirSluginston</h2>
+          <p>
+            A decade ago, SirSluginston wasn’t a company or a brand—he was a gamertag. Birthed from a late-night burst of creativity between two friends, the mustached, monocled, top-hat-wearing slug soon took on a life of his own. He came to represent a way of living: at your own pace, with purpose, and leaving a distinct trail everywhere you go.<br><br>
+            As my ambitions grew beyond gaming, SirSluginston evolved in parallel. Today, he stands as the central home where my projects and ideas can be incubated and nurtured until they’re ready to flourish on their own. From gaming roots to creative ventures, SirSluginston cultivates projects meant to last.<br><br>
+            <span style="color: var(--color-accent); font-weight: bold;">Our trail is your future.</span>
+          </p>
+          <h3 style="color: var(--color-secondary); margin-top: 2em;">The Mascot & Brand</h3>
+          <p>
+            The SirSluginston mascot—dignified, copper-orange, and royal purple—embodies the brand’s witty, efficient, and whimsical spirit. With his posh name, regal attire, and debonair charm, he’s the perfect symbol for a creative umbrella company that incubates bold ideas and leaves a lasting impression.<br><br>
+            Here, every project is nurtured with a touch of playful professionalism and a dash of royal flair.
+          </p>
+        </div>
+      </div>
+      <div id="footer-container" style="flex-shrink: 0;"></div>
+    </div>
+  <script src="SirSluginston-SharedUI/sharedui.js"></script>
+  <script src="SirSluginston-SharedUI/Hero/hero.js"></script>
+  <script src="SirSluginston-SharedUI/ThemeToggle/theme-toggle.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var checkAndLoadNavbar = function() {
+        var container = document.getElementById('site-navbar') || document.getElementById('navbar-container');
+        if (container) {
+    var script = document.createElement('script');
+    script.src = 'SirSluginston-SharedUI/NavigationBar/navigation-bar.js';
+    document.body.appendChild(script);
+        } else {
+          setTimeout(checkAndLoadNavbar, 50);
+        }
+      };
+      checkAndLoadNavbar();
+    });
+  </script>
+  <script type="module">
+    import { projects } from './projects-config.js';
+    const projectKey = 'sirsluginston-site';
+    const pageKey = 'about';
+
+    const project = projects.find(p => p.projectKey === projectKey);
+    const page = project?.pages?.find(pg => pg.pageKey === pageKey);
+    if (!project || !page) {
+      console.error('Missing project/page config', { projectKey, pageKey });
+    } else {
+      const navbarLinks = (project.pages || [])
+        .filter(p => p.inNavbar)
+        .map(p => ({ href: p.href, text: p.text }));
+
+      const config = {
+        projectTitle: project.projectTitle,
+        projectTagline: project.projectTagline,
+        pageTitle: page.pageTitle,
+        pageTagline: page.pageTagline,
+        hasHeader: page.hasHeader !== false,
+        hasNavbar: page.hasNavbar !== false,
+        hasHero: page.hasHero !== false,
+        hasBody: page.hasBody !== false,
+        hasFooter: page.hasFooter !== false,
+        navbar: { links: navbarLinks }
+      };
+
+      if (window.SharedUILib) {
+        const branding = {
+          projectLogoUrl: 'SirSluginston-SharedUI/Assets/Images/SirSluginston_Logo_Original.JPG',
+          projectTitle: config.projectTitle,
+          projectTagline: config.projectTagline
+        };
+        // Inject global config for navbar.js
+        // Sort pages by navbarOrder for correct navbar display
+        const navbarPages = (project.pages || [])
+          .filter(pg => pg.inNavbar)
+          .sort((a, b) => Number(a.navbarOrder) - Number(b.navbarOrder));
+        window.SharedUIConfig = {
+          navbarLinks: navbarPages.map(pg => ({ href: pg.href, text: pg.text, pageKey: pg.pageKey })),
+          pages: navbarPages.map(pg => ({ key: pg.pageKey, pageTitle: pg.pageTitle, href: pg.href })),
+          slug: projectKey,
+          projectTitle: config.projectTitle
+        };
+        window.SharedUILib.applyBranding?.(branding);
+        if (config.hasHeader) window.SharedUILib.injectHeader(branding);
+        if (config.hasNavbar) window.SharedUILib.injectNavbar(config);
+        if (config.hasHero && window.SharedUIHero?.inject) {
+          const heroContainer = document.getElementById('hero-container');
+          window.SharedUIHero.inject(heroContainer, config.pageTitle, config.pageTagline);
+        }
+        if (config.hasBody && window.SharedUILib.injectBody) window.SharedUILib.injectBody(config);
+        if (config.hasFooter) window.SharedUILib.injectFooter(branding);
+      }
+    }
+  </script>
+</body>
+</html>

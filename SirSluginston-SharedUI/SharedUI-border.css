@@ -1,0 +1,68 @@
+/* --- SharedUI Outer Border and Layout --- */
+/* Shared border between stacked sections */
+.sharedui-outer-border > * + * {
+  border-top: 2px solid var(--color-secondary) !important;
+}
+
+/* Main outer border for SharedUI */
+.sharedui-outer-border {
+  border-top: 2px solid var(--color-secondary);
+  border-bottom: 2px solid var(--color-secondary);
+  border-left: 2px solid var(--color-secondary);
+  border-right: 2px solid var(--color-secondary);
+  border-radius: 0.3rem;
+  margin: 1vw;
+  width: auto;
+  min-height: 96vh;
+  background: var(--color-bg);
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0;
+}
+
+html, body {
+  background: var(--color-bg);
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* Remove left/right borders from all inner elements, only use border-bottom for separation */
+#header-container, #navbar-container, #body-container {
+  border-left: none !important;
+  border-right: none !important;
+}
+
+/* Header border (bottom only) */
+header.shared-header {
+  border-top: 1px solid var(--color-secondary);
+  border-bottom: 1px solid var(--color-secondary);
+  border-left: none !important;
+  border-right: none !important;
+}
+
+/* Navbar border (bottom only) */
+.shared-navbar {
+  border-top: 1px solid var(--color-secondary);
+  border-bottom: 1px solid var(--color-secondary);
+  border-left: none !important;
+  border-right: none !important;
+}
+
+.shared-body {
+  border-top: 1px solid var(--color-secondary);
+  border-bottom: 1px solid var(--color-secondary);
+  border-left: none !important;
+  border-right: none !important;
+}
+
+.shared-footer {
+  border-top: 1px solid var(--color-secondary);
+  border-bottom: 1px solid var(--color-secondary);
+  border-left: none !important;
+  border-right: none !important;
+}

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SirSluginston Projects</title>
+  <link rel="stylesheet" href="SirSluginston-SharedUI/Header/header.css">
+  <link rel="stylesheet" href="SirSluginston-SharedUI/NavigationBar/navigation-bar.css">
+  <link rel="stylesheet" href="SirSluginston-SharedUI/ProjectCards/project-card.css">
+  <link rel="stylesheet" href="SirSluginston-SharedUI/Footer/footer.css">
+  <link rel="stylesheet" href="SirSluginston-SharedUI/variables.css">
+  <link rel="stylesheet" href="SirSluginston-SharedUI/SharedUI-border.css">
+  <link rel="stylesheet" href="SirSluginston-SharedUI/ThemeToggle/theme-toggle.css">
+  <link rel="stylesheet" href="SirSluginston-SharedUI/Hero/hero.css">
+  <script src="SirSluginston-SharedUI/ProjectCards/project-card.js"></script>
+  <style>
+    body { background: var(--color-bg); margin: 0; color: var(--color-text); }
+    .main-container {
+      width: 100%;
+      max-width: none;
+      margin: 0 auto;
+      background: var(--color-bg);
+      color: var(--color-text);
+      /* border, border-radius, and box-shadow removed for SharedUI consistency */
+      padding: 2.5rem 1rem 0.5rem 1rem;
+    }
+    #footer-container {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    .projects-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+    }
+  </style>
+</head>
+  <body style="min-height: 100vh; display: flex; flex-direction: column; margin: 0;">
+    <div class="sharedui-outer-border" style="flex: 1 0 auto; display: flex; flex-direction: column; min-height: 100vh;">
+      <div id="header-container"></div>
+      <div id="site-navbar"></div>
+      <div id="hero-container"></div>
+      <div class="main-container" style="flex: 1 0 auto;">
+        <!-- Hero displays title and tagline -->
+        <div id="projects-list" class="projects-list"></div>
+      </div>
+      <div id="footer-container" style="flex-shrink: 0;"></div>
+    </div>
+  <script src="SirSluginston-SharedUI/sharedui.js"></script>
+  <script src="SirSluginston-SharedUI/Hero/hero.js"></script>
+  <script src="SirSluginston-SharedUI/ThemeToggle/theme-toggle.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var checkAndLoadNavbar = function() {
+        var container = document.getElementById('site-navbar') || document.getElementById('navbar-container');
+        if (container) {
+          var script = document.createElement('script');
+  script.src = 'SirSluginston-SharedUI/NavigationBar/navigation-bar.js';
+          document.body.appendChild(script);
+        } else {
+          setTimeout(checkAndLoadNavbar, 50);
+        }
+      };
+      checkAndLoadNavbar();
+    });
+  </script>
+  <script type="module">
+    import { projects } from './projects-config.js';
+    const projectKey = 'sirsluginston-site';
+    const pageKey = 'projects';
+
+    const project = projects?.find(p => p.projectKey === projectKey);
+    const page = project?.pages?.find(pg => pg.pageKey === pageKey);
+    if (!project || !page) {
+      console.error('Missing project/page config', { projectKey, pageKey });
+    } else {
+      const navbarLinks = (project.pages || [])
+        .filter(p => p.inNavbar)
+        .map(p => ({ href: p.href, text: p.text }));
+
+      const config = {
+        projectTitle: project.projectTitle,
+        projectTagline: project.projectTagline,
+        pageTitle: page.pageTitle,
+        pageTagline: page.pageTagline,
+        hasHeader: page.hasHeader !== false,
+        hasNavbar: page.hasNavbar !== false,
+        hasHero: page.hasHero !== false,
+        hasBody: page.hasBody !== false,
+        hasFooter: page.hasFooter !== false,
+        navbar: { links: navbarLinks }
+      };
+
+      if (window.SharedUILib) {
+        const branding = {
+          projectLogoUrl: 'SirSluginston-SharedUI/Assets/Images/SirSluginston_Logo_Original.JPG',
+          projectTitle: config.projectTitle,
+          projectTagline: config.projectTagline
+        };
+        // Inject global config for navbar.js
+        // Sort pages by navbarOrder for correct navbar display
+        const navbarPages = (project.pages || [])
+          .filter(pg => pg.inNavbar)
+          .sort((a, b) => Number(a.navbarOrder) - Number(b.navbarOrder));
+        window.SharedUIConfig = {
+          navbarLinks: navbarPages.map(pg => ({ href: pg.href, text: pg.text, pageKey: pg.pageKey })),
+          pages: navbarPages.map(pg => ({ key: pg.pageKey, pageTitle: pg.pageTitle, href: pg.href })),
+          slug: projectKey,
+          projectTitle: config.projectTitle
+        };
+        window.SharedUILib.applyBranding?.(branding);
+  if (config.hasHeader) window.SharedUILib.injectHeader(branding);
+  // if (config.hasNavbar) window.SharedUILib.injectNavbar(config); // Disabled for local-only navbar.js testing
+  if (config.hasHero && window.SharedUIHero?.inject) {
+          const heroContainer = document.getElementById('hero-container');
+          window.SharedUIHero.inject(heroContainer, config.pageTitle, config.pageTagline);
+        }
+        if (config.hasBody && window.SharedUILib.injectBody) window.SharedUILib.injectBody(config);
+        if (config.hasFooter) window.SharedUILib.injectFooter(branding);
+      }
+
+      // Debug: Check if projects-list container exists after SharedUI injectBody
+      setTimeout(() => {
+        const projectsList = document.getElementById('projects-list');
+        console.log('[DEBUG] projects-list container:', projectsList);
+        console.log('[DEBUG] project.hasCard:', project.hasCard);
+        console.log('[DEBUG] window.SharedUIProjectCards:', window.SharedUIProjectCards);
+        console.log('[DEBUG] window.SharedUIProjectCard:', window.SharedUIProjectCard);
+        console.log('[DEBUG] typeof window.SharedUIProjectCards:', typeof window.SharedUIProjectCards);
+        console.log('[DEBUG] typeof window.SharedUIProjectCards?.inject:', typeof window.SharedUIProjectCards?.inject);
+        console.log('[DEBUG] typeof window.SharedUIProjectCard:', typeof window.SharedUIProjectCard);
+        console.log('[DEBUG] typeof window.SharedUIProjectCard?.render:', typeof window.SharedUIProjectCard?.render);
+        console.log('[DEBUG] project:', project);
+        if (projectsList && project.hasCard) {
+          projectsList.innerHTML = '';
+          // Ensure logo field is mapped for SharedUI
+          project.projectLogoUrl = project.projectLogoURL;
+          if (window.SharedUIProjectCards?.inject) {
+            window.SharedUIProjectCards.inject(projectsList, [project]);
+            console.log('[DEBUG] Injected project card using SharedUIProjectCards.inject');
+          } else if (window.SharedUIProjectCard?.render) {
+            window.SharedUIProjectCard.render(projectsList, project);
+            console.log('[DEBUG] Injected project card using SharedUIProjectCard.render');
+          } else {
+            console.warn('[DEBUG] SharedUIProjectCards.inject and SharedUIProjectCard.render not available. No card rendered.');
+          }
+        } else {
+          console.warn('[DEBUG] No project card to render or container missing.');
+        }
+      }, 0);
+    }
+  </script>
+  </script>
+</body>
+</html>

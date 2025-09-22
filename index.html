@@ -3,86 +3,122 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login | SirSluginston SharedUI</title>
+  <title>SirSluginston SSO Login</title>
+  <link rel="icon" href="SirSluginston-SharedUI/Assets/Images/SirSluginston_Logo_Original.JPG">
+  <link rel="stylesheet" href="SirSluginston-SharedUI/Header/header.css">
+  <link rel="stylesheet" href="SirSluginston-SharedUI/Dropdown/dropdown.css">
+  <link rel="stylesheet" href="SirSluginston-SharedUI/Modals/modal.css">
+  <link rel="stylesheet" href="SirSluginston-SharedUI/Footer/footer.css">
+  <link rel="stylesheet" href="SirSluginston-SharedUI/variables.css">
+  <link rel="stylesheet" href="SirSluginston-SharedUI/SharedUI-border.css">
+  <link rel="stylesheet" href="SirSluginston-SharedUI/ThemeToggle/theme-toggle.css">
   <style>
-    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f7f7f7; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-    .login-container { background: #fff; border-radius: 1rem; box-shadow: 0 4px 24px #0002; padding: 2.5rem 2rem; min-width: 320px; text-align: center; }
-    .login-title { font-size: 1.5rem; margin-bottom: 1.2rem; color: #4B3A78; }
-    .login-btn { background: #4B3A78; color: #fff; border: none; border-radius: 0.4rem; padding: 0.7rem 2.2rem; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 1.5rem; transition: background 0.2s; }
+    body {
+      background: var(--color-bg);
+      margin: 0;
+      color: var(--color-text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .sharedui-outer-border {
+      flex: 1 0 auto;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      margin: 2.5rem 1rem 0.5rem 1rem;
+      background: var(--color-bg);
+    }
+    #header-container { width: 100%; flex: 0 0 auto; }
+    .page-main {
+      flex: 1 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .login-container {
+      background: var(--color-bg);
+      color: var(--color-text);
+      border-radius: 1rem;
+      box-shadow: 0 4px 24px #0002;
+      border: 2px solid var(--color-secondary);
+      padding: 2.5rem 2rem;
+      min-width: 320px;
+      text-align: center;
+    }
+    .login-title { font-size: 1.5rem; margin-bottom: 1.2rem; color: var(--color-secondary, #4B3A78); }
+    .login-btn { background: var(--color-secondary, #4B3A78); color: #fff; border: none; border-radius: 0.4rem; padding: 0.7rem 2.2rem; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 1.5rem; transition: background 0.2s; }
     .login-btn:hover { background: #D2691E; }
-    .login-note { color: #888; font-size: 0.95rem; margin-top: 1.2rem; }
+    .login-note {
+      color: var(--color-text);
+      font-size: 0.95rem;
+      margin-top: 1.2rem;
+    }
+    #footer-container { width: 100%; flex: 0 0 auto; }
   </style>
-  <link rel="stylesheet" href="SirSluginston-SharedUI/SharedUI/Dropdown/dropdown.css">
-  <link rel="stylesheet" href="SirSluginston-SharedUI/SharedUI/Modals/modal.css">
 </head>
 <body>
-  <div class="login-container">
-    <div class="login-title">SirSluginston Co<br>SharedUI Demo</div>
-      <select id="projectSelector" style="margin-bottom:1rem; width:100%; padding:0.5rem; border-radius:0.3rem; font-size:1rem;">
-        <option value="SharedUI">SharedUI</option>
-        <option value="sirsluginston-co">SirSluginston Co</option>
-        <!-- Add more projects here as needed -->
-      </select>
-      <form id="loginForm" style="margin-bottom:1rem;">
-        <input type="email" id="loginEmail" placeholder="Email" required style="width:100%;margin-bottom:0.5rem;padding:0.5rem;" />
-        <input type="password" id="loginPassword" placeholder="Password" required style="width:100%;margin-bottom:0.5rem;padding:0.5rem;" />
-        <button class="login-btn" type="submit">Login</button>
-      </form>
-      <div id="loginMessage" style="color:#D2691E;font-weight:bold;"></div>
-    <div class="login-note">(This is a placeholder. In the future, this will be a real SSO login.)</div>
+  <div class="sharedui-outer-border">
+  <div id="header-container"></div>
+  <div id="site-navbar"></div>
+    <main class="page-main">
+      <div class="login-container">
+        <div class="login-title">SirSluginston SSO Login</div>
+        <form id="loginForm" style="margin-bottom:1rem;">
+          <input type="email" id="loginEmail" placeholder="Email" required style="width:100%;margin-bottom:0.5rem;padding:0.5rem;" />
+          <input type="password" id="loginPassword" placeholder="Password" required style="width:100%;margin-bottom:0.5rem;padding:0.5rem;" />
+          <button class="login-btn" type="submit">Login</button>
+        </form>
+        <div id="loginMessage" style="color:#D2691E;font-weight:bold;"></div>
+        <div class="login-note">(This is a placeholder. In the future, this will be a real SSO login.)</div>
+      </div>
+    </main>
+    <div id="footer-container"></div>
   </div>
-  <script src="SirSluginston-SharedUI/SharedUI/Dropdown/dropdown.js"></script>
-  <script src="SirSluginston-SharedUI/SharedUI/Modals/modal.js"></script>
-  <script>
-      // Helper to get ssoLoginUrl from projects.json for selected project
-      async function getSsoLoginUrl(project) {
-        try {
-          const resp = await fetch('https://www.sirsluginston.com/projects.json');
-          const projects = await resp.json();
-          const config = projects.find(p => p.slug && p.slug.toLowerCase() === project.toLowerCase());
-          return config && config.ssoLoginUrl ? config.ssoLoginUrl : null;
-        } catch (e) { return null; }
-      }
+  <script src="SirSluginston-SharedUI/sharedui.js"></script>
+  <script src="SirSluginston-SharedUI/ThemeToggle/theme-toggle.js"></script>
+  <script src="SirSluginston-SharedUI/Dropdown/dropdown.js"></script>
+  <script src="SirSluginston-SharedUI/Modals/modal.js"></script>
+  <script type="module">
+    import { projects } from './projects-config.js';
 
-      document.getElementById('loginForm').onsubmit = async function(e) {
-        e.preventDefault();
-        const selector = document.getElementById('projectSelector');
-        const project = selector ? selector.value : 'SharedUI';
-        const email = document.getElementById('loginEmail').value;
-        const password = document.getElementById('loginPassword').value;
-        const msg = document.getElementById('loginMessage');
-        msg.textContent = 'Logging in...';
-        const ssoUrl = await getSsoLoginUrl(project);
-        if (!ssoUrl) {
-          msg.textContent = 'SSO endpoint not found for this project.';
-          return;
-        }
-        try {
-          const resp = await fetch(ssoUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
-          });
-          const data = await resp.json();
-          if (resp.ok && data.token) {
-            msg.textContent = 'Login successful! Redirecting...';
-            setTimeout(() => {
-              if (project === 'SharedUI') {
-                window.location.href = '/SirSluginston-SharedUI/home.html?project=' + encodeURIComponent(project);
-              } else if (project === 'sirsluginston-co') {
-                window.location.href = '/SirSluginston-SharedUI/home.html?project=' + encodeURIComponent(project);
-              }
-            }, 1000);
-          } else {
-            msg.textContent = 'Login failed: ' + (data.error || 'Invalid credentials.');
-          }
-        } catch (err) {
-          msg.textContent = 'Login error: ' + err;
-        }
+    const projectKey = 'sirsluginston-site';
+    const pageKey = 'index';
+    const project = projects.find(p => p.projectKey === projectKey);
+    const page = project?.pages?.find(pg => pg.pageKey === pageKey);
+
+    function inject() {
+      if (!project || !page) {
+        console.warn('Index page config missing; skipping SharedUI injection');
+        return;
+      }
+      const branding = {
+        projectLogoUrl: 'SirSluginston-SharedUI/Assets/Images/SirSluginston_Logo_Original.JPG',
+        projectTitle: project.projectTitle,
+        projectTagline: project.projectTagline
       };
-    document.addEventListener('DOMContentLoaded', function() {
-      if (window.SharedUIDropdown) SharedUIDropdown.initAll();
-      if (window.SharedUIModal) SharedUIModal.initAll();
+      if (window.SharedUILib?.applyBranding) window.SharedUILib.applyBranding(branding);
+      if (page.hasHeader !== false && window.SharedUILib?.injectHeader) window.SharedUILib.injectHeader(branding);
+      // Intentionally no navbar on login page (hasNavbar false)
+      if (page.hasFooter !== false && window.SharedUILib?.injectFooter) window.SharedUILib.injectFooter(branding);
+    }
+
+    document.getElementById('loginForm').onsubmit = function(e) {
+      e.preventDefault();
+      const msg = document.getElementById('loginMessage');
+      msg.textContent = 'Logging in...';
+      setTimeout(() => {
+        msg.textContent = 'Login successful! Redirecting...';
+        window.location.href = 'home.html';
+      }, 900);
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.SharedUIDropdown?.initAll) window.SharedUIDropdown.initAll();
+      if (window.SharedUIModal?.initAll) window.SharedUIModal.initAll();
+      inject();
     });
   </script>
 </body>

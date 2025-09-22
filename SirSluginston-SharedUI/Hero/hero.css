@@ -1,0 +1,31 @@
+/* SharedUI Hero Styles */
+.shared-hero {
+  text-align: center;
+  padding: 0.8rem 0 0.8rem 0;
+  background: var(--color-primary);
+  color: var(--color-bg);
+  border: none !important;
+  border-radius: 0;
+  margin: 0 !important;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 4px 24px #0001;
+  font-family: var(--font-sans);
+}
+.shared-hero-title {
+	font-family: var(--font-serif);
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin: 0 0 0.5rem 0;
+	color: var(--color-secondary);
+	text-shadow: 0 1px 4px var(--color-accent);
+}
+.shared-hero-tagline {
+	font-family: var(--font-sans);
+	font-size: 1.2rem;
+	font-style: italic;
+	color: var(--color-text);
+	margin-top: 0.2em;
+	text-shadow: 0 1px 4px var(--color-accent);
+	margin-bottom: 0;
+}
